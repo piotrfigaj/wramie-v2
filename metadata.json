@@ -1,0 +1,6 @@
+{
+  "name": "wramie.com - Personalizowane Plakaty",
+  "description": "Butikowe studio personalizowanych plakatów premium: mapy gwiazd, mapy miast oraz portrety pupili.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

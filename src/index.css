@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;700&family=Dancing+Script:wght@700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #F5F0E8;
+  --color-peach: #F2C4A0;
+  --color-terracotta: #C8765A;
+  --color-rust: #A0522D;
+  --color-sand: #E8DFD0;
+  --color-charcoal: #2C2416;
+  --color-warm-white: #FAF7F2;
+  --color-gold: #C9A84C;
+  --color-midnight: #0D1B2A;
+  --color-deep-navy: #1a2744;
+  --color-star-white: #E8EEF4;
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'DM Sans', sans-serif;
+  --font-cursive: 'Dancing Script', cursive;
+}
+
+:root {
+  --cream: #F5F0E8;
+  --peach: #F2C4A0;
+  --terracotta: #C8765A;
+  --rust: #A0522D;
+  --sand: #E8DFD0;
+  --charcoal: #2C2416;
+  --warm-white: #FAF7F2;
+  --gold: #C9A84C;
+  --midnight: #0D1B2A;
+  --deep-navy: #1a2744;
+  --star-white: #E8EEF4;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #FAF7F2;
+  color: #2C2416;
+  margin: 0;
+  padding: 0;
+}
+
+/* Stagger animations support */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.star {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.star:nth-child(2n) {
+  animation-delay: 0.8s;
+  animation-duration: 2.6s;
+}
+
+.star:nth-child(3n) {
+  animation-delay: 1.5s;
+  animation-duration: 3.8s;
+}
+
+/* Poster frames */
+.poster-mock {
+  aspect-ratio: 3/4;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.frame-black::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 14px solid #141414;
+  border-radius: 4px;
+  z-index: 25;
+  pointer-events: none;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.frame-oak::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 14px solid #8B5A2B;
+  border-radius: 4px;
+  z-index: 25;
+  pointer-events: none;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.4);
+}
+
+/* Glass glare reflection on poster */
+.glare-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.05) 100%);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Premium shadows */
+.shadow-poster {
+  box-shadow: 
+    0 5px 15px rgba(0,0,0,0.15),
+    0 15px 35px rgba(44, 36, 22, 0.18),
+    0 25px 70px rgba(44, 36, 22, 0.25);
+}
+
+/* Hide scrollbars but preserve functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Glowing starry lines */
+.constellation-line {
+  stroke-dasharray: 100;
+  animation: drawLine 6s linear infinite alternate;
+}
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 50;
+  }
+}
+
+/* Custom slider style */
+.slider-handle:active {
+  cursor: grabbing;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
