@@ -10,6 +10,10 @@ export interface PosterCustomization {
   hasFrame: boolean;
   petStyle?: 'royal' | 'popart';
   passionTheme?: 'music' | 'car' | 'sports';
+  // Star-map appearance tuning (only used by the 'stars' poster)
+  textScale?: number;    // multiplier for on-poster text size (1 = default)
+  starMapScale?: number; // multiplier for the constellation circle size (1 = default)
+  starCount?: number;    // number of background stars scattered on the sky
   quantity: number;
   hasPremiumSeal?: boolean;
   hasInsurance?: boolean;
