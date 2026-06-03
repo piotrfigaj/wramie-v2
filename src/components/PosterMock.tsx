@@ -6,6 +6,27 @@ interface PosterMockProps {
   interactive?: boolean;
 }
 
+// Deterministic pseudo-random star field generator.
+// Using a fixed seed keeps the star positions stable across re-renders
+// (so stars don't "jump" on every keystroke) while still reacting to count.
+const buildStarField = (count: number) => {
+  let seed = 9241;
+  const rnd = () => {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    return seed / 0x7fffffff;
+  };
+  const palette = ['#FFFFFF', '#FAF0D9', '#E8EEF4', '#FDE9C8', '#FFFFFF'];
+  return Array.from({ length: Math.max(0, count) }, (_, i) => ({
+    id: i,
+    top: rnd() * 100,
+    left: rnd() * 100,
+    size: 1 + Math.round(rnd() * 2), // 1 - 3 px
+    color: palette[Math.floor(rnd() * palette.length)],
+    delay: +(rnd() * 3).toFixed(2),
+    duration: +(2.4 + rnd() * 2).toFixed(2),
+  }));
+};
+
 export const PosterMock: React.FC<PosterMockProps> = ({ customization, interactive = false }) => {
   const {
     type,
@@ -17,6 +38,9 @@ export const PosterMock: React.FC<PosterMockProps> = ({ customization, interacti
     hasFrame,
     petStyle = 'royal',
     passionTheme = 'music',
+    textScale = 1,
+    starMapScale = 1,
+    starCount = 24,
   } = customization;
 
   // Frame Styles mapping
@@ -92,21 +116,32 @@ export const PosterMock: React.FC<PosterMockProps> = ({ customization, interacti
           </svg>
         </div>
 
-        {/* Twinkling star elements */}
+        {/* Twinkling star elements (count controlled by starCount) */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="star absolute w-1 h-1 bg-white rounded-full top-1/4 left-1/3" />
-          <div className="star absolute w-[2px] h-[2px] bg-white rounded-full top-[15%] left-[70%]" />
-          <div className="star absolute w-1.5 h-1.5 bg-[#FAF0D9] rounded-full top-1/2 left-[80%]" />
-          <div className="star absolute w-[2px] h-[2px] bg-white rounded-full top-[70%] left-[25%]" />
-          <div className="star absolute w-[3px] h-[3px] bg-amber-200 rounded-full top-[35%] left-[85%]" />
-          <div className="star absolute w-[1px] h-[1px] bg-white rounded-full top-[55%] left-[15%]" />
-          <div className="star absolute w-[2px] h-[2px] bg-white rounded-full top-10 left-[45%]" />
-          <div className="star absolute w-[3px] h-[3px] bg-slate-300 rounded-full top-[64%] left-[68%]" />
+          {buildStarField(starCount).map((s) => (
+            <div
+              key={s.id}
+              className="star absolute rounded-full"
+              style={{
+                top: `${s.top}%`,
+                left: `${s.left}%`,
+                width: `${s.size}px`,
+                height: `${s.size}px`,
+                backgroundColor: s.color,
+                animationDelay: `${s.delay}s`,
+                animationDuration: `${s.duration}s`,
+              }}
+            />
+          ))}
         </div>
 
         {/* Main Constellation Circle */}
         <div className="relative flex-1 flex items-center justify-center pt-4">
-          <svg className="w-[82%] aspect-square relative" viewBox="0 0 200 200">
+          <svg
+            className="aspect-square relative"
+            style={{ width: `${Math.min(96, Math.max(50, 82 * starMapScale))}%` }}
+            viewBox="0 0 200 200"
+          >
             {/* Outer Constellation Ring */}
             <circle cx="100" cy="100" r="94" fill="none" stroke={colors.circleStroke} strokeWidth="1.5" strokeDasharray="3 3" opacity="0.4" />
             <circle cx="100" cy="100" r="90" fill="none" stroke={colors.circleStroke} strokeWidth="1" />
@@ -165,16 +200,32 @@ export const PosterMock: React.FC<PosterMockProps> = ({ customization, interacti
 
         {/* Poster Labeling Section */}
         <div className="text-center z-10 pt-4 pb-2 border-t border-dashed border-opacity-20 border-white/40">
-          <p className={`font-serif text-lg tracking-wide mb-1 ${colors.text}`}>{title || "Natalia & Kacper"}</p>
+          <p
+            className={`font-serif tracking-wide mb-1 ${colors.text}`}
+            style={{ fontSize: `${18 * textScale}px`, lineHeight: 1.25 }}
+          >
+            {title || "Natalia & Kacper"}
+          </p>
           <div className="h-[1px] w-12 bg-current opacity-30 mx-auto my-1.5" />
-          <p className={`font-cursive text-md ${colors.accentText} min-h-[22px] mb-1`}>{subtitle || "Wśród gwiazd wszystko się zaczęło"}</p>
-          <div className="flex justify-center items-center gap-3 text-[9px] uppercase tracking-wider font-mono opacity-80 mt-1">
+          <p
+            className={`font-cursive ${colors.accentText} mb-1`}
+            style={{ fontSize: `${16 * textScale}px`, minHeight: `${22 * textScale}px` }}
+          >
+            {subtitle || "Wśród gwiazd wszystko się zaczęło"}
+          </p>
+          <div
+            className="flex justify-center items-center gap-3 uppercase tracking-wider font-mono opacity-80 mt-1"
+            style={{ fontSize: `${9 * textScale}px` }}
+          >
             <span className={colors.accentText}>{location || "Wrocław, PL"}</span>
             <span className="opacity-40">|</span>
             <span className={colors.text}>{dateString || "23 LIPCA 2025"}</span>
           </div>
           {location && (
-            <div className={`text-[7px] font-mono opacity-50 tracking-widest mt-0.5 ${colors.mutedText}`}>
+            <div
+              className={`font-mono opacity-50 tracking-widest mt-0.5 ${colors.mutedText}`}
+              style={{ fontSize: `${7 * textScale}px` }}
+            >
               51° 6' 27.817'' N &bull; 17° 1' 58.076'' E
             </div>
           )}

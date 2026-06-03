@@ -63,6 +63,9 @@ export const ProductView: React.FC<ProductViewProps> = ({
     customization.hasFrame,
     customization.petStyle,
     customization.passionTheme,
+    customization.textScale,
+    customization.starMapScale,
+    customization.starCount,
   ]);
 
   // Sync date strings
@@ -385,6 +388,84 @@ export const ProductView: React.FC<ProductViewProps> = ({
                   </select>
                 </div>
               </div>
+
+              {/* STARS ONLY: live appearance tuning (text size / map size / star count) */}
+              {customization.type === 'stars' && (
+                <div className="space-y-5 pt-5 border-t border-[#2C2416]/10 text-left">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center bg-[#C8765A] text-white text-[10px] font-bold font-mono w-4.5 h-4.5 rounded-full shrink-0">5</span>
+                    <label className="text-xs font-bold uppercase tracking-widest text-[#2C2416] font-mono">
+                      Dopasuj wygląd mapy gwiazd:
+                    </label>
+                  </div>
+
+                  {/* Text size */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2C2416]/70">
+                        Wielkość tekstów
+                      </span>
+                      <span className="text-[10px] font-mono text-[#C8765A] font-bold">
+                        {Math.round((customization.textScale ?? 1) * 100)}%
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.8"
+                      max="1.4"
+                      step="0.05"
+                      value={customization.textScale ?? 1}
+                      onChange={(e) => handleFieldChange('textScale', parseFloat(e.target.value))}
+                      className="w-full accent-[#C8765A] cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Constellation size */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2C2416]/70">
+                        Wielkość mapy gwiazd
+                      </span>
+                      <span className="text-[10px] font-mono text-[#C8765A] font-bold">
+                        {Math.round((customization.starMapScale ?? 1) * 100)}%
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.7"
+                      max="1.15"
+                      step="0.05"
+                      value={customization.starMapScale ?? 1}
+                      onChange={(e) => handleFieldChange('starMapScale', parseFloat(e.target.value))}
+                      className="w-full accent-[#C8765A] cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Star count */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2C2416]/70">
+                        Ilość gwiazd na niebie
+                      </span>
+                      <span className="text-[10px] font-mono text-[#C8765A] font-bold">
+                        {customization.starCount ?? 24}
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="6"
+                      max="80"
+                      step="1"
+                      value={customization.starCount ?? 24}
+                      onChange={(e) => handleFieldChange('starCount', parseInt(e.target.value, 10))}
+                      className="w-full accent-[#C8765A] cursor-pointer"
+                    />
+                    <p className="text-[10px] text-[#2C2416]/45 font-sans">
+                      Przeciągnij, aby zagęścić lub rozrzedzić rozgwieżdżone tło.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* CARD 2: EXPLICIT STEP 2 - PRODUCT SETUP FORMAT & STYLE */}

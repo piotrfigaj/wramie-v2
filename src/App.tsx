@@ -66,6 +66,9 @@ export default function App() {
     theme: 'night',
     size: '40x50',
     hasFrame: true,
+    textScale: 1,
+    starMapScale: 1,
+    starCount: 24,
     quantity: 1,
   });
 
